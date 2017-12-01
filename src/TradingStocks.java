@@ -15,21 +15,29 @@ public class TradingStocks {
     }
 
     private static int getMaxProfit(int[] stockPricesYesterday) {
+        int minPrice = stockPricesYesterday[0];
         int maxProfit = 0;
 
-        for (int buyIndex = 0; buyIndex < (stockPricesYesterday.length - 1); buyIndex++) {
-            // buyIndex = 0, 1, < 5, buyPrice = 10, 7,
-            int buyPrice = stockPricesYesterday[buyIndex];
+        for (int currentPrice : stockPricesYesterday) {
 
-            for (int sellIndex = buyIndex + 1; sellIndex < stockPricesYesterday.length; sellIndex++) {
-                // sellIndex = 1, 2, 3, 4, 5, 6 < 6, sellPrice = 7, 5, 8, 11, 9  profit = -3, -5, -2, 1, -1
-                // sellIndex = 2, 3, 4, 5, 6 < 6, sellPrice = 5, 8, 11, 9, profit = -2, 1, 4, 2
-                int sellPrice = stockPricesYesterday[sellIndex];
-                int profit = sellPrice - buyPrice;
+            // ensure minPrice is the lowest price we've seen so far
+            // minPrice = 10, 7, 5, 5, 5, 5,
+            minPrice = Math.min(minPrice, currentPrice);
+            System.out.println("minPrice: " + minPrice);
 
-                maxProfit = Math.max(maxProfit, profit); //maxProfit = 1
-            }
+            // see what our profit would be if we bought at the
+            // min price and sold at the current price
+            // potentialProfit = 10 - 10 = 0, 7 - 7 = 0, 5 - 5 = 0, 8 - 5 = 3, 11 - 5 = 6, 9 - 5 = 4,
+            int potentialProfit = currentPrice - minPrice;
+            System.out.println("potentialProfit: " + potentialProfit);
+
+            // update maxProfit if we can do better
+            // maxProfit = 0, 0, 0, 3, 6, 6,
+            maxProfit = Math.max(maxProfit, potentialProfit);
+            System.out.println("maxProfit: " + maxProfit);
+            System.out.println("---");
         }
+
         return maxProfit;
     }
 }
